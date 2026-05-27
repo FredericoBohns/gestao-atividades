@@ -2,7 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="theme-color" content="#534AB7" />
 <title>Gestão de Atividades</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css" />
 <style>
@@ -13,14 +16,16 @@
     --text-primary: #1a1a1a;
     --text-secondary: #6b6b6b;
     --text-tertiary: #9e9e9e;
-    --border-light: rgba(0,0,0,0.1);
-    --border-medium: rgba(0,0,0,0.18);
+    --border-light: rgba(0,0,0,0.09);
+    --border-medium: rgba(0,0,0,0.16);
     --accent: #534AB7;
     --accent-dark: #3C3489;
     --accent-light: #EEEDFE;
     --radius-sm: 8px;
     --radius-md: 10px;
     --radius-lg: 14px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -29,53 +34,74 @@
       --bg-tertiary: #242424;
       --text-primary: #f0f0f0;
       --text-secondary: #aaaaaa;
-      --text-tertiary: #777777;
-      --border-light: rgba(255,255,255,0.1);
-      --border-medium: rgba(255,255,255,0.18);
+      --text-tertiary: #666666;
+      --border-light: rgba(255,255,255,0.08);
+      --border-medium: rgba(255,255,255,0.15);
       --accent-light: #2e2a55;
     }
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-tertiary); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-tertiary); color: var(--text-primary); display: flex; flex-direction: column; }
 
-  #loginScreen { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-  .login-card { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 32px; width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
-  .login-icon { text-align: center; font-size: 40px; color: var(--accent); }
+  /* LOGIN */
+  #loginScreen { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; min-height: 100dvh; }
+  .login-card { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 32px 28px; width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
+  .login-icon { text-align: center; font-size: 44px; color: var(--accent); }
   .login-title { font-size: 18px; font-weight: 600; text-align: center; }
   .login-sub { font-size: 13px; color: var(--text-secondary); text-align: center; line-height: 1.5; }
-  .login-input { padding: 11px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); font-size: 14px; background: var(--bg-secondary); color: var(--text-primary); width: 100%; }
+  .login-input { padding: 13px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); font-size: 16px; background: var(--bg-secondary); color: var(--text-primary); width: 100%; }
   .login-input:focus { outline: none; border-color: var(--accent); }
-  .login-btn { padding: 11px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; font-size: 14px; font-weight: 500; cursor: pointer; }
-  .login-btn:hover { background: var(--accent-dark); }
+  .login-btn { padding: 13px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; font-size: 15px; font-weight: 500; cursor: pointer; }
+  .login-btn:active { background: var(--accent-dark); }
 
-  #mainApp { display: none; flex-direction: column; height: 100vh; }
-  .share-bar { padding: 8px 16px; background: var(--accent-light); border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--accent-dark); flex-shrink: 0; }
-  .share-url { flex: 1; background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text-secondary); font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .copy-btn { padding: 4px 12px; border-radius: 6px; border: 0.5px solid var(--accent); background: none; color: var(--accent); font-size: 12px; cursor: pointer; white-space: nowrap; }
-  .copy-btn:hover { background: var(--accent); color: white; }
-  .app-body { flex: 1; display: grid; grid-template-columns: 280px 1fr; overflow: hidden; }
+  /* MAIN APP */
+  #mainApp { display: none; flex-direction: column; height: 100dvh; padding-top: var(--safe-top); }
 
-  .sidebar { border-right: 0.5px solid var(--border-light); display: flex; flex-direction: column; background: var(--bg-secondary); overflow: hidden; }
-  .sidebar-header { padding: 12px 14px; border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  /* SHARE BAR */
+  .share-bar { padding: 7px 14px; background: var(--accent-light); border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--accent-dark); flex-shrink: 0; }
+  .share-url { flex: 1; background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-secondary); font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy-btn { padding: 4px 10px; border-radius: 6px; border: 0.5px solid var(--accent); background: none; color: var(--accent); font-size: 12px; cursor: pointer; white-space: nowrap; }
+  .copy-btn:active { background: var(--accent); color: white; }
+
+  /* ONLINE BAR */
+  .online-bar { padding: 6px 14px; background: var(--bg-primary); border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-height: 36px; }
+  .online-label { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+  .online-avatars { display: flex; align-items: center; gap: -4px; flex: 1; overflow: hidden; }
+  .online-avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; border: 2px solid var(--bg-primary); margin-left: -6px; flex-shrink: 0; position: relative; }
+  .online-avatar:first-child { margin-left: 0; }
+  .online-avatar .presence-dot { position: absolute; bottom: -1px; right: -1px; width: 7px; height: 7px; border-radius: 50%; background: #639922; border: 1.5px solid var(--bg-primary); }
+  .online-name-list { font-size: 11px; color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .activity-pulse { font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 4px; animation: fadeIn 0.3s ease; white-space: nowrap; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+  /* LAYOUT */
+  .app-body { flex: 1; display: flex; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar { width: 270px; flex-shrink: 0; border-right: 0.5px solid var(--border-light); display: flex; flex-direction: column; background: var(--bg-secondary); overflow: hidden; transition: transform 0.25s ease; }
+  .sidebar-header { padding: 11px 13px; border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .sidebar-title { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
   .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #639922; flex-shrink: 0; }
   .sync-dot.syncing { background: #EF9F27; animation: pulse 1s infinite; }
   .sync-dot.offline { background: #E24B4A; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .add-btn { background: none; border: 0.5px solid var(--border-medium); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
-  .add-btn:hover { background: var(--bg-primary); }
-  .task-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .add-btn { background: none; border: 0.5px solid var(--border-medium); border-radius: var(--radius-sm); padding: 5px 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
+  .add-btn:active { background: var(--bg-primary); }
+  .task-list { flex: 1; overflow-y: auto; padding: 8px; -webkit-overflow-scrolling: touch; }
 
-  .task-item { border-radius: var(--radius-sm); margin-bottom: 6px; border: 0.5px solid var(--border-light); background: var(--bg-primary); transition: border-color 0.15s; }
-  .task-item:hover { border-color: var(--border-medium); }
+  .task-item { border-radius: var(--radius-sm); margin-bottom: 7px; border: 0.5px solid var(--border-light); background: var(--bg-primary); }
   .task-item.active { border-color: var(--accent); }
-  .task-item-body { padding: 10px 12px; cursor: pointer; }
+  .task-item-body { padding: 11px 12px; cursor: pointer; }
+  .task-item-body:active { background: var(--bg-secondary); border-radius: var(--radius-sm); }
   .task-name { font-size: 13px; font-weight: 500; margin-bottom: 5px; line-height: 1.3; }
   .task-badges { display: flex; gap: 4px; flex-wrap: wrap; }
-  .task-actions { display: flex; align-items: center; gap: 2px; padding: 4px 8px; border-top: 0.5px solid var(--border-light); background: var(--bg-secondary); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
-  .task-action-btn { background: none; border: none; cursor: pointer; padding: 3px 6px; border-radius: 4px; color: var(--text-tertiary); font-size: 14px; display: flex; align-items: center; }
-  .task-action-btn:hover { background: var(--bg-tertiary); color: var(--text-secondary); }
-  .task-action-btn.delete:hover { color: #E24B4A; background: #FCEBEB; }
+  .task-editor { font-size: 11px; color: var(--accent); margin-top: 5px; display: none; align-items: center; gap: 4px; }
+  .task-editor.visible { display: flex; animation: fadeIn 0.3s ease; }
+  .task-actions { display: flex; align-items: center; gap: 2px; padding: 4px 8px 5px; border-top: 0.5px solid var(--border-light); background: var(--bg-secondary); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+  .task-action-btn { background: none; border: none; cursor: pointer; padding: 5px 8px; border-radius: 5px; color: var(--text-tertiary); font-size: 15px; display: flex; align-items: center; }
+  .task-action-btn:active { background: var(--bg-tertiary); color: var(--text-secondary); }
+  .task-action-btn.delete:active { color: #E24B4A; background: #FCEBEB; }
   .task-action-spacer { flex: 1; }
 
   .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; padding: 2px 7px; border-radius: 20px; }
@@ -89,26 +115,26 @@
   .badge-critical { background: #FCEBEB; color: #791F1F; }
   .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
 
-  .add-task-form { padding: 10px 14px; border-top: 0.5px solid var(--border-light); display: none; flex-direction: column; gap: 7px; flex-shrink: 0; }
+  .add-task-form { padding: 10px 13px; border-top: 0.5px solid var(--border-light); display: none; flex-direction: column; gap: 7px; flex-shrink: 0; }
   .add-task-form.open { display: flex; }
-  .form-input { padding: 8px 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); font-size: 13px; background: var(--bg-primary); color: var(--text-primary); width: 100%; font-family: inherit; }
+  .form-input { padding: 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); font-size: 14px; background: var(--bg-primary); color: var(--text-primary); width: 100%; font-family: inherit; }
   .form-input:focus { outline: none; border-color: var(--accent); }
   .form-row { display: flex; gap: 7px; }
-  .form-btn { flex: 1; padding: 8px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; border: 0.5px solid var(--border-medium); font-family: inherit; }
+  .form-btn { flex: 1; padding: 10px; border-radius: var(--radius-sm); font-size: 14px; cursor: pointer; border: 0.5px solid var(--border-medium); font-family: inherit; }
   .form-btn-confirm { background: var(--accent); color: white; border-color: var(--accent); }
-  .form-btn-confirm:hover { background: var(--accent-dark); }
   .form-btn-cancel { background: none; color: var(--text-secondary); }
-  .form-btn-cancel:hover { background: var(--bg-secondary); }
 
-  .main { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-primary); }
-  .main-header { padding: 10px 14px; border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
-  .tab-btn { padding: 5px 12px; border-radius: var(--radius-sm); border: 0.5px solid transparent; font-size: 12px; cursor: pointer; color: var(--text-secondary); background: none; font-family: inherit; }
-  .tab-btn:hover { background: var(--bg-secondary); }
+  /* MAIN PANEL */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-primary); min-width: 0; }
+  .main-header { padding: 10px 13px; border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
+  .mobile-back { display: none; background: none; border: none; cursor: pointer; color: var(--accent); font-size: 22px; padding: 2px 4px; }
+  .tab-btn { padding: 6px 12px; border-radius: var(--radius-sm); border: 0.5px solid transparent; font-size: 13px; cursor: pointer; color: var(--text-secondary); background: none; font-family: inherit; }
   .tab-btn.active { background: var(--bg-secondary); border-color: var(--border-medium); color: var(--text-primary); font-weight: 500; }
-  .hdr-select { font-size: 12px; padding: 5px 8px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; margin-left: auto; font-family: inherit; }
+  .hdr-select { font-size: 12px; padding: 6px 8px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; margin-left: auto; font-family: inherit; max-width: 130px; }
   .hdr-select + .hdr-select { margin-left: 4px; }
 
-  .panel { flex: 1; overflow-y: auto; display: none; flex-direction: column; }
+  /* PANELS */
+  .panel { flex: 1; overflow-y: auto; display: none; flex-direction: column; -webkit-overflow-scrolling: touch; }
   .panel.active { display: flex; }
   .detail-panel { padding: 16px; gap: 12px; }
   .detail-block { background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 13px 15px; }
@@ -117,27 +143,27 @@
   .detail-value { font-size: 13px; color: var(--text-primary); }
   .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-  /* CHAT PANEL */
+  /* CHAT */
   .chat-panel { display: none; flex-direction: column; flex: 1; overflow: hidden; }
   .chat-panel.active { display: flex; }
-  .chat-messages-area { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-  .chat-compose { border-top: 0.5px solid var(--border-light); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+  .chat-messages-area { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; -webkit-overflow-scrolling: touch; }
+  .chat-compose { border-top: 0.5px solid var(--border-light); padding: 10px 13px; padding-bottom: calc(10px + var(--safe-bottom)); display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; background: var(--bg-primary); }
   .compose-toolbar { display: flex; align-items: center; gap: 6px; }
   .compose-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
   .compose-divider { flex: 1; height: 0.5px; background: var(--border-light); }
-  .ai-btn { padding: 4px 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); background: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-family: inherit; }
-  .ai-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
-  .compose-input { padding: 10px 12px; border-radius: var(--radius-lg); border: 0.5px solid var(--border-medium); font-size: 13px; resize: none; min-height: 44px; max-height: 120px; background: var(--bg-secondary); color: var(--text-primary); font-family: inherit; width: 100%; }
+  .ai-btn { padding: 5px 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); background: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-family: inherit; }
+  .ai-btn:active { background: var(--accent-light); color: var(--accent); }
+  .compose-input { padding: 11px 13px; border-radius: var(--radius-lg); border: 0.5px solid var(--border-medium); font-size: 15px; resize: none; min-height: 46px; max-height: 120px; background: var(--bg-secondary); color: var(--text-primary); font-family: inherit; width: 100%; }
   .compose-input:focus { outline: none; border-color: var(--accent); }
   .compose-actions { display: flex; align-items: center; justify-content: space-between; }
   .compose-hint { font-size: 11px; color: var(--text-tertiary); }
-  .send-btn { padding: 7px 16px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; font-family: inherit; }
-  .send-btn:hover { background: var(--accent-dark); }
+  .send-btn { padding: 9px 18px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 14px; font-family: inherit; }
+  .send-btn:active { background: var(--accent-dark); }
 
   .msg { display: flex; gap: 8px; align-items: flex-start; }
   .msg.user-msg { flex-direction: row-reverse; }
   .avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-  .bubble { max-width: 78%; padding: 9px 13px; border-radius: var(--radius-lg); font-size: 13px; line-height: 1.6; }
+  .bubble { max-width: 80%; padding: 9px 13px; border-radius: var(--radius-lg); font-size: 14px; line-height: 1.6; }
   .bubble-ai { background: var(--bg-secondary); border: 0.5px solid var(--border-light); border-top-left-radius: 4px; color: var(--text-primary); }
   .bubble-user { background: #EEEDFE; color: #26215C; border-top-right-radius: 4px; }
   .bubble-other { background: var(--bg-secondary); border: 0.5px solid var(--border-light); border-top-left-radius: 4px; color: var(--text-primary); }
@@ -145,30 +171,45 @@
   .msg-meta { font-size: 11px; opacity: 0.5; margin-top: 3px; display: block; }
   .user-chip { display: inline-flex; font-size: 11px; padding: 1px 8px; border-radius: 20px; background: #EEEDFE; color: #3C3489; margin-bottom: 3px; }
 
-  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-tertiary); font-size: 13px; }
-
-  .typing { display: flex; gap: 4px; align-items: center; padding: 2px 0; }
+  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-tertiary); font-size: 13px; padding: 32px; text-align: center; }
+  .typing { display: flex; gap: 4px; align-items: center; }
   .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-tertiary); animation: blink 1.2s infinite; }
   .typing span:nth-child(2) { animation-delay: 0.2s; }
   .typing span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
 
-  /* CONFIRM MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
-  .modal-box { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; max-width: 320px; width: 90%; display: flex; flex-direction: column; gap: 14px; }
+  .modal-box { background: var(--bg-primary); border-radius: var(--radius-lg); padding: 24px; max-width: 320px; width: 100%; display: flex; flex-direction: column; gap: 14px; }
   .modal-title { font-size: 15px; font-weight: 500; }
   .modal-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
-  .modal-btn { padding: 7px 16px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; border: 0.5px solid var(--border-medium); font-family: inherit; }
+  .modal-btn { padding: 9px 18px; border-radius: var(--radius-sm); font-size: 14px; cursor: pointer; border: 0.5px solid var(--border-medium); font-family: inherit; }
   .modal-btn-cancel { background: none; color: var(--text-secondary); }
-  .modal-btn-cancel:hover { background: var(--bg-secondary); }
   .modal-btn-delete { background: #E24B4A; color: white; border-color: #E24B4A; }
-  .modal-btn-delete:hover { background: #A32D2D; }
 
-  @media (max-width: 600px) {
-    .app-body { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
+  /* MOBILE NAV */
+  .mobile-nav { display: none; border-top: 0.5px solid var(--border-light); background: var(--bg-primary); padding-bottom: var(--safe-bottom); flex-shrink: 0; }
+  .mobile-nav-inner { display: flex; }
+  .mobile-nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 8px; cursor: pointer; background: none; border: none; color: var(--text-tertiary); font-size: 10px; font-family: inherit; }
+  .mobile-nav-btn.active { color: var(--accent); }
+  .mobile-nav-btn i { font-size: 22px; }
+
+  /* MOBILE OVERLAY SIDEBAR */
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; }
+  .sidebar-overlay.open { display: block; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; z-index: 60; transform: translateX(-100%); width: 85%; max-width: 300px; padding-top: var(--safe-top); }
+    .sidebar.open { transform: translateX(0); }
+    .share-bar { display: none; }
+    .mobile-nav { display: block; }
+    .mobile-back { display: flex; }
+    .hdr-select { font-size: 12px; max-width: 110px; }
+    .compose-hint { display: none; }
+    .main-header { flex-wrap: nowrap; overflow-x: auto; gap: 4px; }
   }
 </style>
 </head>
@@ -179,7 +220,7 @@
     <div class="login-icon"><i class="ti ti-layout-kanban"></i></div>
     <div class="login-title">Gestão de Atividades</div>
     <div class="login-sub">Entre com seu nome para acessar o board compartilhado com o time</div>
-    <input class="login-input" id="nameInput" placeholder="Seu nome..." maxlength="30" onkeydown="if(event.key==='Enter')doLogin()" />
+    <input class="login-input" id="nameInput" placeholder="Seu nome..." maxlength="30" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="name" />
     <button class="login-btn" onclick="doLogin()">Entrar no board</button>
   </div>
 </div>
@@ -187,12 +228,21 @@
 <div id="mainApp">
   <div class="share-bar">
     <i class="ti ti-users" style="font-size:14px"></i>
-    <span style="font-weight:500">Compartilhe com o time:</span>
+    <span style="font-weight:500">Compartilhe:</span>
     <div class="share-url" id="shareUrl"></div>
-    <button class="copy-btn" onclick="copyLink()" id="copyBtn">Copiar link</button>
+    <button class="copy-btn" onclick="copyLink()" id="copyBtn">Copiar</button>
+  </div>
+
+  <!-- BARRA DE PRESENÇA -->
+  <div class="online-bar" id="onlineBar">
+    <span class="online-label">Online:</span>
+    <div class="online-avatars" id="onlineAvatars"></div>
+    <span class="online-name-list" id="onlineNames"></span>
+    <span class="activity-pulse" id="activityPulse" style="display:none"></span>
   </div>
 
   <div class="app-body">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
     <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <span class="sidebar-title">
@@ -221,8 +271,11 @@
       </div>
     </div>
 
-    <div class="main">
+    <div class="main" id="mainPanel">
       <div class="main-header">
+        <button class="mobile-back" onclick="goBack()" id="mobileBack" style="display:none">
+          <i class="ti ti-arrow-left"></i>
+        </button>
         <button class="tab-btn active" id="tabDetail" onclick="switchTab('detail')" style="display:none">
           <i class="ti ti-info-circle" style="font-size:13px;margin-right:3px"></i>Detalhes
         </button>
@@ -243,10 +296,9 @@
         </select>
       </div>
 
-      <!-- DETAIL PANEL -->
       <div class="panel detail-panel active" id="panelDetail">
         <div class="empty-state" id="detailEmpty">
-          <i class="ti ti-layout-kanban" style="font-size:36px"></i>
+          <i class="ti ti-layout-kanban" style="font-size:42px"></i>
           <span>Selecione uma atividade</span>
         </div>
         <div id="detailContent" style="display:none;flex-direction:column;gap:12px">
@@ -255,32 +307,19 @@
             <div class="detail-desc" id="detailDesc"></div>
           </div>
           <div class="meta-grid">
-            <div class="detail-block">
-              <div class="detail-label">Status</div>
-              <div id="detailStatus"></div>
-            </div>
-            <div class="detail-block">
-              <div class="detail-label">Importância</div>
-              <div id="detailImportance"></div>
-            </div>
-            <div class="detail-block">
-              <div class="detail-label">Responsável</div>
-              <div class="detail-value" id="detailOwner"></div>
-            </div>
-            <div class="detail-block">
-              <div class="detail-label">Criado por</div>
-              <div class="detail-value" id="detailCreated"></div>
-            </div>
+            <div class="detail-block"><div class="detail-label">Status</div><div id="detailStatus"></div></div>
+            <div class="detail-block"><div class="detail-label">Importância</div><div id="detailImportance"></div></div>
+            <div class="detail-block"><div class="detail-label">Responsável</div><div class="detail-value" id="detailOwner"></div></div>
+            <div class="detail-block"><div class="detail-label">Criado por</div><div class="detail-value" id="detailCreated"></div></div>
           </div>
         </div>
       </div>
 
-      <!-- CHAT PANEL -->
       <div class="panel chat-panel" id="panelChat">
         <div class="chat-messages-area" id="chatMessagesArea">
           <div class="empty-state" id="chatEmpty">
-            <i class="ti ti-message-circle" style="font-size:36px"></i>
-            <span>Selecione uma atividade</span>
+            <i class="ti ti-message-circle" style="font-size:42px"></i>
+            <span>Selecione uma atividade para ver o chat</span>
           </div>
           <div id="chatMessages" style="display:none;flex-direction:column;gap:10px"></div>
         </div>
@@ -288,13 +327,13 @@
           <div class="compose-toolbar">
             <span class="compose-label">Comentar</span>
             <div class="compose-divider"></div>
-            <button class="ai-btn" onclick="askAI()" id="aiBtn">
+            <button class="ai-btn" onclick="askAI()">
               <i class="ti ti-sparkles" style="font-size:13px"></i> Perguntar à IA
             </button>
           </div>
-          <textarea class="compose-input" id="chatInput" placeholder="Escreva um comentário, atualização ou discussão sobre esta atividade..." onkeydown="handleKey(event)"></textarea>
+          <textarea class="compose-input" id="chatInput" placeholder="Escreva um comentário ou discussão..." onkeydown="handleKey(event)"></textarea>
           <div class="compose-actions">
-            <span class="compose-hint">Shift+Enter para nova linha · Enter para enviar</span>
+            <span class="compose-hint">Shift+Enter para nova linha</span>
             <button class="send-btn" onclick="sendMessage()">
               <i class="ti ti-send" style="font-size:14px"></i> Enviar
             </button>
@@ -303,13 +342,35 @@
       </div>
     </div>
   </div>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-btn active" id="navTasks" onclick="mobileNav('tasks')">
+        <i class="ti ti-layout-list"></i>
+        <span>Atividades</span>
+      </button>
+      <button class="mobile-nav-btn" id="navDetail" onclick="mobileNav('detail')" style="opacity:0.4">
+        <i class="ti ti-info-circle"></i>
+        <span>Detalhes</span>
+      </button>
+      <button class="mobile-nav-btn" id="navChat" onclick="mobileNav('chat')" style="opacity:0.4">
+        <i class="ti ti-message-circle"></i>
+        <span>Chat</span>
+      </button>
+      <button class="mobile-nav-btn" onclick="copyLink()">
+        <i class="ti ti-share"></i>
+        <span>Compartilhar</span>
+      </button>
+    </div>
+  </nav>
 </div>
 
-<!-- DELETE CONFIRM MODAL -->
+<!-- DELETE MODAL -->
 <div class="modal-overlay" id="deleteModal">
   <div class="modal-box">
     <div class="modal-title">Deletar atividade</div>
-    <div class="modal-sub" id="deleteModalText">Tem certeza que deseja deletar esta atividade? Esta ação não pode ser desfeita.</div>
+    <div class="modal-sub" id="deleteModalText"></div>
     <div class="modal-actions">
       <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
       <button class="modal-btn modal-btn-delete" onclick="confirmDelete()">Deletar</button>
@@ -319,6 +380,8 @@
 
 <script>
 const ANTHROPIC_KEY = 'COLE_SUA_CHAVE_AQUI';
+const DB_KEY = 'board-tasks-v1';
+const PRESENCE_KEY = 'board-presence-v1';
 
 const STATUS = {
   todo:    { label:'Não iniciado', badge:'badge-todo',     dot:'#7F77DD' },
@@ -332,17 +395,79 @@ const IMPORTANCE = {
   high:    { label:'Alta',    badge:'badge-high' },
   critical:{ label:'Crítica', badge:'badge-critical' },
 };
-const AVATAR_COLORS = ['#EEEDFE:#3C3489','#E1F5EE:#085041','#FAEEDA:#633806','#FAECE7:#712B13','#E6F1FB:#0C447C'];
+const AVATAR_COLORS = ['#EEEDFE:#3C3489','#E1F5EE:#085041','#FAEEDA:#633806','#FAECE7:#712B13','#E6F1FB:#0C447C','#FAECE7:#993C1D'];
 
-let currentUser = '', currentId = null, tasks = [], currentTab = 'detail', deleteTargetId = null;
-const DB_KEY = 'board-tasks-v1';
+let currentUser='', currentId=null, tasks=[], currentTab='detail', deleteTargetId=null;
+let isMobile = window.innerWidth <= 640;
+let mobileView = 'tasks';
 
 function ts() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
 function avatarColor(n) { const i=n.charCodeAt(0)%AVATAR_COLORS.length; const[bg,c]=AVATAR_COLORS[i].split(':'); return{bg,c}; }
 function initials(n) { return n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
 function setSyncDot(s) { const d=document.getElementById('syncDot'); d.className='sync-dot'+(s==='syncing'?' syncing':s==='offline'?' offline':''); }
 
-function saveLocal() { localStorage.setItem(DB_KEY, JSON.stringify({tasks, updated: Date.now()})); }
+// PRESENCE
+function savePresence() {
+  try {
+    const all = JSON.parse(localStorage.getItem(PRESENCE_KEY)||'{}');
+    all[currentUser] = { name:currentUser, ts:Date.now(), task:currentId };
+    localStorage.setItem(PRESENCE_KEY, JSON.stringify(all));
+  } catch(e){}
+}
+
+function getOnlineUsers() {
+  try {
+    const all = JSON.parse(localStorage.getItem(PRESENCE_KEY)||'{}');
+    const now = Date.now();
+    return Object.values(all).filter(u => now - u.ts < 15000);
+  } catch(e){ return []; }
+}
+
+let lastActivity = '';
+function broadcastActivity(msg) {
+  try {
+    localStorage.setItem('board-activity', JSON.stringify({msg, user:currentUser, ts:Date.now()}));
+  } catch(e){}
+}
+
+function renderOnlineBar() {
+  const users = getOnlineUsers();
+  const avatarsEl = document.getElementById('onlineAvatars');
+  const namesEl = document.getElementById('onlineNames');
+  avatarsEl.innerHTML = '';
+  users.forEach(u => {
+    const av = avatarColor(u.name);
+    const div = document.createElement('div');
+    div.className = 'online-avatar';
+    div.style.background = av.bg;
+    div.style.color = av.c;
+    div.title = u.name;
+    div.innerHTML = initials(u.name) + '<span class="presence-dot"></span>';
+    avatarsEl.appendChild(div);
+  });
+  const others = users.filter(u => u.name !== currentUser);
+  if (others.length === 0) {
+    namesEl.textContent = 'Só você agora';
+  } else if (others.length === 1) {
+    namesEl.textContent = others[0].name + ' também está aqui';
+  } else {
+    namesEl.textContent = others.map(u=>u.name).join(', ') + ' também estão aqui';
+  }
+
+  // checar atividade recente de outros
+  try {
+    const act = JSON.parse(localStorage.getItem('board-activity')||'null');
+    if (act && act.user !== currentUser && Date.now()-act.ts < 5000 && act.msg !== lastActivity) {
+      lastActivity = act.msg;
+      const el = document.getElementById('activityPulse');
+      el.style.display = 'flex';
+      el.innerHTML = `<i class="ti ti-pencil" style="font-size:12px"></i> ${act.user}: ${act.msg}`;
+      setTimeout(() => { el.style.display='none'; lastActivity=''; }, 4000);
+    }
+  } catch(e){}
+}
+
+function saveLocal() { localStorage.setItem(DB_KEY, JSON.stringify({tasks, updated:Date.now()})); }
 function loadLocal() { try { const r=localStorage.getItem(DB_KEY); if(r) tasks=JSON.parse(r).tasks||[]; } catch(e){} }
 
 function doLogin() {
@@ -355,25 +480,30 @@ function doLogin() {
   loadLocal();
   if (!tasks.length) {
     tasks = [
-      {id:1,name:'Implementação MFA no site',desc:'Configurar autenticação multifator para todos os usuários.\n\n• Avaliar bibliotecas TOTP disponíveis\n• Integrar com o fluxo de login existente\n• Adicionar tela de configuração no perfil\n• Testes de regressão em todos os fluxos de autenticação',owner:'Time Dev',status:'progress',importance:'critical',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
-      {id:2,name:'Revisão de segurança',desc:'Auditar permissões de acesso de todos os módulos.\n\n• Verificar tokens expirados e sessões ativas\n• Revisar logs dos últimos 30 dias\n• Corrigir vulnerabilidades do último pentest',owner:'Ana',status:'todo',importance:'high',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
-      {id:3,name:'Deploy em produção',desc:'Subir versão 2.1 para produção com rollback automático.\n\n• Smoke tests pós-deploy\n• Notificação para o time após conclusão',owner:'Carlos',status:'done',importance:'medium',history:[{user:'Sistema',text:'Atividade criada.',time:ts()},{user:'Carlos',text:'Deploy realizado com sucesso às 14h. Versão 2.1 em prod.',time:ts()}]},
+      {id:1,name:'Implementação MFA no site',desc:'Configurar autenticação multifator para todos os usuários.\n\n• Avaliar bibliotecas TOTP disponíveis\n• Integrar com o fluxo de login existente\n• Adicionar tela de configuração no perfil\n• Testes de regressão em todos os fluxos',owner:'Time Dev',status:'progress',importance:'critical',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
+      {id:2,name:'Revisão de segurança',desc:'Auditar permissões de acesso de todos os módulos.\n\n• Verificar tokens expirados\n• Revisar logs dos últimos 30 dias\n• Corrigir vulnerabilidades do último pentest',owner:'Ana',status:'todo',importance:'high',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
+      {id:3,name:'Deploy em produção',desc:'Subir versão 2.1 para produção com rollback automático.\n\n• Smoke tests pós-deploy\n• Notificação para o time',owner:'Carlos',status:'done',importance:'medium',history:[{user:'Sistema',text:'Atividade criada.',time:ts()},{user:'Carlos',text:'Deploy realizado com sucesso às 14h. Versão 2.1 em prod.',time:ts()}]},
     ];
     saveLocal();
   }
   renderSidebar();
   setSyncDot('ok');
+  savePresence();
+  renderOnlineBar();
   setInterval(() => {
-    loadLocal(); renderSidebar();
+    loadLocal(); renderSidebar(); savePresence(); renderOnlineBar();
     if(currentId){ const t=tasks.find(x=>x.id===currentId); if(t){ if(currentTab==='detail') renderDetail(t); if(currentTab==='chat') renderChat(); } }
   }, 3000);
+  isMobile = window.innerWidth <= 640;
 }
 
 function renderSidebar() {
   const list = document.getElementById('taskList');
+  const scrollTop = list.scrollTop;
   list.innerHTML = '';
   tasks.forEach((t, idx) => {
     const s = STATUS[t.status], im = IMPORTANCE[t.importance||'medium'];
+    const onlineOnTask = getOnlineUsers().filter(u => u.name!==currentUser && u.task===t.id);
     const div = document.createElement('div');
     div.className = 'task-item' + (currentId===t.id?' active':'');
     div.innerHTML = `
@@ -383,29 +513,32 @@ function renderSidebar() {
           <span class="badge ${s.badge}"><span class="status-dot" style="background:${s.dot}"></span>${s.label}</span>
           <span class="badge ${im.badge}"><i class="ti ti-star" style="font-size:11px"></i>${im.label}</span>
         </div>
+        ${onlineOnTask.length ? `<div class="task-editor visible"><i class="ti ti-eye" style="font-size:11px"></i>${onlineOnTask.map(u=>u.name).join(', ')} vendo</div>` : ''}
       </div>
       <div class="task-actions">
-        <button class="task-action-btn" onclick="moveTask(${t.id},-1)" title="Mover para cima" ${idx===0?'style="opacity:0.3;cursor:default"':''}>
+        <button class="task-action-btn" onclick="event.stopPropagation();moveTask(${t.id},-1)" title="Mover para cima" ${idx===0?'style="opacity:0.25"':''}>
           <i class="ti ti-arrow-up"></i>
         </button>
-        <button class="task-action-btn" onclick="moveTask(${t.id},1)" title="Mover para baixo" ${idx===tasks.length-1?'style="opacity:0.3;cursor:default"':''}>
+        <button class="task-action-btn" onclick="event.stopPropagation();moveTask(${t.id},1)" title="Mover para baixo" ${idx===tasks.length-1?'style="opacity:0.25"':''}>
           <i class="ti ti-arrow-down"></i>
         </button>
         <div class="task-action-spacer"></div>
-        <button class="task-action-btn delete" onclick="openDeleteModal(${t.id})" title="Deletar atividade">
+        <button class="task-action-btn delete" onclick="event.stopPropagation();openDeleteModal(${t.id})" title="Deletar">
           <i class="ti ti-trash"></i>
         </button>
       </div>`;
     list.appendChild(div);
   });
+  list.scrollTop = scrollTop;
 }
 
 function moveTask(id, dir) {
   const idx = tasks.findIndex(x => x.id===id);
   const newIdx = idx + dir;
   if (newIdx < 0 || newIdx >= tasks.length) return;
-  const tmp = tasks[idx]; tasks[idx] = tasks[newIdx]; tasks[newIdx] = tmp;
+  [tasks[idx], tasks[newIdx]] = [tasks[newIdx], tasks[idx]];
   saveLocal(); renderSidebar();
+  broadcastActivity('reordenou atividades');
 }
 
 function openDeleteModal(id) {
@@ -414,207 +547,200 @@ function openDeleteModal(id) {
   document.getElementById('deleteModalText').textContent = `Tem certeza que deseja deletar "${t.name}"? Esta ação não pode ser desfeita.`;
   document.getElementById('deleteModal').classList.add('open');
 }
-function closeDeleteModal() {
-  deleteTargetId = null;
-  document.getElementById('deleteModal').classList.remove('open');
-}
+function closeDeleteModal() { deleteTargetId=null; document.getElementById('deleteModal').classList.remove('open'); }
 function confirmDelete() {
   if (!deleteTargetId) return;
-  tasks = tasks.filter(x => x.id !== deleteTargetId);
-  if (currentId === deleteTargetId) {
-    currentId = null;
-    document.getElementById('detailEmpty').style.display = '';
-    document.getElementById('detailContent').style.display = 'none';
-    document.getElementById('chatEmpty').style.display = '';
-    document.getElementById('chatMessages').style.display = 'none';
-    document.getElementById('chatCompose').style.display = 'none';
-    ['tabDetail','tabChat','statusSelect','importanceSelect'].forEach(id => document.getElementById(id).style.display='none');
-  }
+  const t = tasks.find(x=>x.id===deleteTargetId);
+  tasks = tasks.filter(x => x.id!==deleteTargetId);
+  if (currentId===deleteTargetId) { currentId=null; clearMainPanel(); }
   saveLocal(); renderSidebar(); closeDeleteModal();
+  broadcastActivity(`deletou "${t.name}"`);
+}
+
+function clearMainPanel() {
+  document.getElementById('detailEmpty').style.display='';
+  document.getElementById('detailContent').style.display='none';
+  document.getElementById('chatEmpty').style.display='';
+  document.getElementById('chatMessages').style.display='none';
+  document.getElementById('chatCompose').style.display='none';
+  ['tabDetail','tabChat','statusSelect','importanceSelect'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('mobileBack').style.display='none';
 }
 
 function renderDetail(t) {
-  document.getElementById('detailEmpty').style.display = 'none';
-  const dc = document.getElementById('detailContent');
-  dc.style.display = 'flex';
-  const s = STATUS[t.status], im = IMPORTANCE[t.importance||'medium'];
-  document.getElementById('detailDesc').textContent = t.desc || 'Sem descrição.';
+  document.getElementById('detailEmpty').style.display='none';
+  document.getElementById('detailContent').style.display='flex';
+  const s=STATUS[t.status], im=IMPORTANCE[t.importance||'medium'];
+  document.getElementById('detailDesc').textContent = t.desc||'Sem descrição.';
   document.getElementById('detailStatus').innerHTML = `<span class="badge ${s.badge}" style="font-size:12px"><span class="status-dot" style="background:${s.dot}"></span>${s.label}</span>`;
   document.getElementById('detailImportance').innerHTML = `<span class="badge ${im.badge}" style="font-size:12px"><i class="ti ti-star" style="font-size:12px"></i>${im.label}</span>`;
-  document.getElementById('detailOwner').textContent = t.owner || '—';
-  const creator = t.history?.[0]?.user || '—';
-  document.getElementById('detailCreated').textContent = creator === 'Sistema' ? '—' : creator;
+  document.getElementById('detailOwner').textContent = t.owner||'—';
+  const creator = t.history?.[0]?.user||'—';
+  document.getElementById('detailCreated').textContent = creator==='Sistema'?'—':creator;
 }
 
 function renderChat() {
-  const t = tasks.find(x => x.id===currentId);
+  const t = tasks.find(x=>x.id===currentId);
   if (!t) return;
-  document.getElementById('chatEmpty').style.display = 'none';
+  document.getElementById('chatEmpty').style.display='none';
   const msgs = document.getElementById('chatMessages');
-  msgs.style.display = 'flex';
-  msgs.innerHTML = '';
-  t.history.forEach(m => appendBubbleEl(msgs, m));
-  document.getElementById('chatCompose').style.display = '';
   const area = document.getElementById('chatMessagesArea');
-  area.scrollTop = area.scrollHeight;
+  const wasAtBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 60;
+  msgs.style.display='flex';
+  msgs.innerHTML='';
+  t.history.forEach(m=>appendBubbleEl(msgs,m));
+  document.getElementById('chatCompose').style.display='';
+  if (wasAtBottom) area.scrollTop=area.scrollHeight;
 }
 
 function appendBubbleEl(container, m) {
-  const isMe = m.user === currentUser;
-  const isSystem = m.user==='Sistema' || m.user==='IA';
-  const div = document.createElement('div');
+  const isMe=m.user===currentUser, isSystem=m.user==='Sistema'||m.user==='IA';
+  const div=document.createElement('div');
   if (isSystem) {
-    div.className = 'msg';
-    div.innerHTML = `<div class="bubble bubble-system" style="width:100%;text-align:center">${m.user==='IA'?'<strong>IA:</strong> ':''}${m.text}<span class="msg-meta">${m.time}</span></div>`;
+    div.className='msg';
+    div.innerHTML=`<div class="bubble bubble-system" style="width:100%;text-align:center">${m.user==='IA'?'<strong>IA:</strong> ':''}${m.text}<span class="msg-meta">${m.time}</span></div>`;
   } else {
-    div.className = 'msg' + (isMe?' user-msg':'');
-    const av = avatarColor(m.user);
-    div.innerHTML = `<div class="avatar" style="background:${av.bg};color:${av.c}">${initials(m.user)}</div>
+    div.className='msg'+(isMe?' user-msg':'');
+    const av=avatarColor(m.user);
+    div.innerHTML=`<div class="avatar" style="background:${av.bg};color:${av.c}">${initials(m.user)}</div>
       <div class="bubble ${isMe?'bubble-user':'bubble-other'}">${!isMe?`<span class="user-chip">${m.user}</span><br>`:''}${m.text}<span class="msg-meta">${m.time}</span></div>`;
   }
   container.appendChild(div);
 }
 
 function switchTab(tab) {
-  currentTab = tab;
-  document.getElementById('tabDetail').className = 'tab-btn' + (tab==='detail'?' active':'');
-  document.getElementById('tabChat').className = 'tab-btn' + (tab==='chat'?' active':'');
-  document.getElementById('panelDetail').className = 'panel detail-panel' + (tab==='detail'?' active':'');
-  document.getElementById('panelChat').className = 'panel chat-panel' + (tab==='chat'?' active':'');
-  if (tab==='chat' && currentId) renderChat();
+  currentTab=tab;
+  document.getElementById('tabDetail').className='tab-btn'+(tab==='detail'?' active':'');
+  document.getElementById('tabChat').className='tab-btn'+(tab==='chat'?' active':'');
+  document.getElementById('panelDetail').className='panel detail-panel'+(tab==='detail'?' active':'');
+  document.getElementById('panelChat').className='panel chat-panel'+(tab==='chat'?' active':'');
+  if (tab==='chat'&&currentId) renderChat();
 }
 
 function selectTask(id) {
-  currentId = id;
-  const t = tasks.find(x => x.id===id);
-  ['tabDetail','tabChat','statusSelect','importanceSelect'].forEach(s => document.getElementById(s).style.display='');
-  document.getElementById('statusSelect').value = t.status;
-  document.getElementById('importanceSelect').value = t.importance||'medium';
-  renderSidebar();
-  renderDetail(t);
-  switchTab('detail');
+  currentId=id;
+  const t=tasks.find(x=>x.id===id);
+  ['tabDetail','tabChat','statusSelect','importanceSelect'].forEach(s=>document.getElementById(s).style.display='');
+  document.getElementById('statusSelect').value=t.status;
+  document.getElementById('importanceSelect').value=t.importance||'medium';
+  document.getElementById('mobileBack').style.display='flex';
+  renderSidebar(); renderDetail(t); switchTab('detail');
+  savePresence();
+  if (isMobile) { closeSidebar(); setMobileView('detail'); }
 }
 
 function changeField(field, val) {
-  const t = tasks.find(x => x.id===currentId);
+  const t=tasks.find(x=>x.id===currentId);
   if (!t) return;
-  const labels = {status:STATUS, importance:IMPORTANCE};
-  const names = {status:'status', importance:'importância'};
-  const old = labels[field][t[field]||'medium'].label;
-  t[field] = val;
-  const entry = {user:'Sistema', text:`${currentUser} alterou ${names[field]} de "${old}" para "${labels[field][val].label}".`, time:ts()};
+  const labels={status:STATUS,importance:IMPORTANCE}, names={status:'status',importance:'importância'};
+  const old=labels[field][t[field]||'medium'].label;
+  t[field]=val;
+  const entry={user:'Sistema',text:`${currentUser} alterou ${names[field]} de "${old}" para "${labels[field][val].label}".`,time:ts()};
   t.history.push(entry);
   saveLocal(); renderSidebar(); renderDetail(t);
+  broadcastActivity(`alterou ${names[field]} de "${t.name}"`);
   if (currentTab==='chat') { const msgs=document.getElementById('chatMessages'); appendBubbleEl(msgs,entry); document.getElementById('chatMessagesArea').scrollTop=99999; }
 }
 
 function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text || !currentId) return;
-  input.value = '';
-  input.style.height = 'auto';
-  const t = tasks.find(x => x.id===currentId);
-  const entry = {user:currentUser, text, time:ts()};
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if (!text||!currentId) return;
+  input.value=''; input.style.height='auto';
+  const t=tasks.find(x=>x.id===currentId);
+  const entry={user:currentUser,text,time:ts()};
   t.history.push(entry);
-  if (currentTab !== 'chat') switchTab('chat');
-  const msgs = document.getElementById('chatMessages');
-  document.getElementById('chatEmpty').style.display = 'none';
-  msgs.style.display = 'flex';
-  appendBubbleEl(msgs, entry);
-  const area = document.getElementById('chatMessagesArea');
-  area.scrollTop = area.scrollHeight;
+  if (currentTab!=='chat') switchTab('chat');
+  document.getElementById('chatEmpty').style.display='none';
+  const msgs=document.getElementById('chatMessages');
+  msgs.style.display='flex';
+  appendBubbleEl(msgs,entry);
+  document.getElementById('chatMessagesArea').scrollTop=99999;
   saveLocal();
+  broadcastActivity(`comentou em "${t.name}"`);
 }
 
 async function askAI() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
   if (!currentId) return;
-  const question = text || 'Qual o status atual desta atividade e o que ainda precisa ser feito?';
-  input.value = '';
-
-  const t = tasks.find(x => x.id===currentId);
-  if (currentTab !== 'chat') switchTab('chat');
-  const msgs = document.getElementById('chatMessages');
-  document.getElementById('chatEmpty').style.display = 'none';
-  msgs.style.display = 'flex';
-
-  if (text) {
-    const userEntry = {user:currentUser, text:question, time:ts()};
-    t.history.push(userEntry);
-    appendBubbleEl(msgs, userEntry);
-  }
-
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'msg';
-  typingDiv.innerHTML = `<div class="avatar" style="background:#EEEDFE;color:#3C3489">IA</div><div class="bubble bubble-ai"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  const question=text||'Qual o status atual desta atividade e o que ainda precisa ser feito?';
+  input.value='';
+  const t=tasks.find(x=>x.id===currentId);
+  if (currentTab!=='chat') switchTab('chat');
+  document.getElementById('chatEmpty').style.display='none';
+  const msgs=document.getElementById('chatMessages');
+  msgs.style.display='flex';
+  if (text) { const e={user:currentUser,text:question,time:ts()}; t.history.push(e); appendBubbleEl(msgs,e); }
+  const typingDiv=document.createElement('div');
+  typingDiv.className='msg';
+  typingDiv.innerHTML=`<div class="avatar" style="background:#EEEDFE;color:#3C3489">IA</div><div class="bubble bubble-ai"><div class="typing"><span></span><span></span><span></span></div></div>`;
   msgs.appendChild(typingDiv);
-  const area = document.getElementById('chatMessagesArea');
-  area.scrollTop = 99999;
-
-  const im = IMPORTANCE[t.importance||'medium'];
-  const histTxt = t.history.slice(-10).map(h=>`${h.user}: ${h.text}`).join('\n');
-  const sysPrompt = `Você é um assistente de gestão de atividades de um time. Responda em português, de forma direta e útil (máximo 4 frases). Contexto:\n- Atividade: ${t.name}\n- Descrição: ${t.desc}\n- Responsável: ${t.owner}\n- Status: ${STATUS[t.status].label}\n- Importância: ${im.label}\n- Usuário: ${currentUser}\n- Histórico:\n${histTxt}\n\nAjude o time a entender o andamento, próximos passos ou responda a pergunta feita.`;
-
+  const area=document.getElementById('chatMessagesArea');
+  area.scrollTop=99999;
+  const im=IMPORTANCE[t.importance||'medium'];
+  const histTxt=t.history.slice(-10).map(h=>`${h.user}: ${h.text}`).join('\n');
+  const sysPrompt=`Você é um assistente de gestão de atividades. Responda em português, de forma direta (máximo 4 frases). Contexto:\n- Atividade: ${t.name}\n- Descrição: ${t.desc}\n- Responsável: ${t.owner}\n- Status: ${STATUS[t.status].label}\n- Importância: ${im.label}\n- Usuário: ${currentUser}\n- Histórico:\n${histTxt}`;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:sysPrompt, messages:[{role:'user',content:question}] })
-    });
-    const data = await res.json();
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sysPrompt,messages:[{role:'user',content:question}]})});
+    const data=await res.json();
     typingDiv.remove();
-    const reply = data.content?.[0]?.text || 'Não consegui processar.';
-    const aiEntry = {user:'IA', text:reply, time:ts()};
+    const reply=data.content?.[0]?.text||'Não consegui processar.';
+    const aiEntry={user:'IA',text:reply,time:ts()};
     t.history.push(aiEntry);
-    appendBubbleEl(msgs, aiEntry);
-    area.scrollTop = area.scrollHeight;
+    appendBubbleEl(msgs,aiEntry);
+    area.scrollTop=area.scrollHeight;
     saveLocal();
-  } catch(e) {
-    typingDiv.remove();
-    appendBubbleEl(msgs, {user:'Sistema', text:'Erro ao conectar com o assistente IA.', time:ts()});
-  }
+  } catch(e) { typingDiv.remove(); appendBubbleEl(msgs,{user:'Sistema',text:'Erro ao conectar com o assistente.',time:ts()}); }
 }
 
 function handleKey(e) {
-  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  const ta = document.getElementById('chatInput');
-  ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight, 120)+'px';
+  if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMessage(); }
+  const ta=document.getElementById('chatInput');
+  ta.style.height='auto';
+  ta.style.height=Math.min(ta.scrollHeight,120)+'px';
 }
 
 function toggleForm() {
-  const f = document.getElementById('addForm');
+  const f=document.getElementById('addForm');
   f.classList.toggle('open');
   if (f.classList.contains('open')) document.getElementById('newTaskName').focus();
 }
 
 function addTask() {
-  const name = document.getElementById('newTaskName').value.trim();
+  const name=document.getElementById('newTaskName').value.trim();
   if (!name) return;
-  const maxId = tasks.reduce((m,t)=>Math.max(m,t.id),0);
-  tasks.push({
-    id: maxId+1, name,
-    desc: document.getElementById('newTaskDesc').value.trim(),
-    owner: document.getElementById('newTaskOwner').value.trim()||'—',
-    status: 'todo',
-    importance: document.getElementById('newTaskImportance').value,
-    history: [{user:currentUser, text:'Atividade criada.', time:ts()}]
-  });
-  document.getElementById('newTaskName').value = '';
-  document.getElementById('newTaskDesc').value = '';
-  document.getElementById('newTaskOwner').value = '';
+  const maxId=tasks.reduce((m,t)=>Math.max(m,t.id),0);
+  tasks.push({id:maxId+1,name,desc:document.getElementById('newTaskDesc').value.trim(),owner:document.getElementById('newTaskOwner').value.trim()||'—',status:'todo',importance:document.getElementById('newTaskImportance').value,history:[{user:currentUser,text:'Atividade criada.',time:ts()}]});
+  document.getElementById('newTaskName').value='';
+  document.getElementById('newTaskDesc').value='';
+  document.getElementById('newTaskOwner').value='';
   toggleForm(); renderSidebar(); saveLocal();
+  broadcastActivity(`criou "${name}"`);
 }
 
 function copyLink() {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = 'Copiado!';
-    setTimeout(() => btn.textContent = 'Copiar link', 2000);
-  });
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    const btn=document.getElementById('copyBtn');
+    if(btn){btn.textContent='Copiado!';setTimeout(()=>btn.textContent='Copiar',2000);}
+    else alert('Link copiado: '+window.location.href);
+  }).catch(()=>alert('Link: '+window.location.href));
 }
+
+// MOBILE NAV
+function mobileNav(view) {
+  if (view==='tasks') { openSidebar(); setMobileView('tasks'); }
+  else if (!currentId) { alert('Selecione uma atividade primeiro.'); return; }
+  else { setMobileView(view); switchTab(view==='chat'?'chat':'detail'); }
+  ['navTasks','navDetail','navChat'].forEach(id=>{ const el=document.getElementById(id); if(el) el.className='mobile-nav-btn'+(id===`nav${view.charAt(0).toUpperCase()+view.slice(1)}`?' active':''); });
+}
+
+function setMobileView(view) { mobileView=view; }
+function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
+function goBack() { if(isMobile){openSidebar();setMobileView('tasks');} }
+
+window.addEventListener('resize',()=>{ isMobile=window.innerWidth<=640; });
 </script>
 </body>
 </html>
