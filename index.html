@@ -38,7 +38,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-tertiary); color: var(--text-primary); height: 100vh; display: flex; flex-direction: column; }
 
-  /* LOGIN */
   #loginScreen { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
   .login-card { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 32px; width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 16px; }
   .login-icon { text-align: center; font-size: 40px; color: var(--accent); }
@@ -49,7 +48,6 @@
   .login-btn { padding: 11px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; font-size: 14px; font-weight: 500; cursor: pointer; }
   .login-btn:hover { background: var(--accent-dark); }
 
-  /* MAIN APP */
   #mainApp { display: none; flex-direction: column; height: 100vh; }
   .share-bar { padding: 8px 16px; background: var(--accent-light); border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--accent-dark); flex-shrink: 0; }
   .share-url { flex: 1; background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text-secondary); font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -57,7 +55,6 @@
   .copy-btn:hover { background: var(--accent); color: white; }
   .app-body { flex: 1; display: grid; grid-template-columns: 280px 1fr; overflow: hidden; }
 
-  /* SIDEBAR */
   .sidebar { border-right: 0.5px solid var(--border-light); display: flex; flex-direction: column; background: var(--bg-secondary); overflow: hidden; }
   .sidebar-header { padding: 12px 14px; border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .sidebar-title { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
@@ -68,11 +65,19 @@
   .add-btn { background: none; border: 0.5px solid var(--border-medium); border-radius: var(--radius-sm); padding: 4px 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
   .add-btn:hover { background: var(--bg-primary); }
   .task-list { flex: 1; overflow-y: auto; padding: 8px; }
-  .task-item { padding: 11px 12px; border-radius: var(--radius-sm); cursor: pointer; margin-bottom: 6px; border: 0.5px solid var(--border-light); background: var(--bg-primary); transition: border-color 0.15s; }
+
+  .task-item { border-radius: var(--radius-sm); margin-bottom: 6px; border: 0.5px solid var(--border-light); background: var(--bg-primary); transition: border-color 0.15s; }
   .task-item:hover { border-color: var(--border-medium); }
   .task-item.active { border-color: var(--accent); }
+  .task-item-body { padding: 10px 12px; cursor: pointer; }
   .task-name { font-size: 13px; font-weight: 500; margin-bottom: 5px; line-height: 1.3; }
   .task-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+  .task-actions { display: flex; align-items: center; gap: 2px; padding: 4px 8px; border-top: 0.5px solid var(--border-light); background: var(--bg-secondary); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+  .task-action-btn { background: none; border: none; cursor: pointer; padding: 3px 6px; border-radius: 4px; color: var(--text-tertiary); font-size: 14px; display: flex; align-items: center; }
+  .task-action-btn:hover { background: var(--bg-tertiary); color: var(--text-secondary); }
+  .task-action-btn.delete:hover { color: #E24B4A; background: #FCEBEB; }
+  .task-action-spacer { flex: 1; }
+
   .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; padding: 2px 7px; border-radius: 20px; }
   .badge-todo { background: #EEEDFE; color: #3C3489; }
   .badge-progress { background: #FAEEDA; color: #633806; }
@@ -84,7 +89,6 @@
   .badge-critical { background: #FCEBEB; color: #791F1F; }
   .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
 
-  /* FORM */
   .add-task-form { padding: 10px 14px; border-top: 0.5px solid var(--border-light); display: none; flex-direction: column; gap: 7px; flex-shrink: 0; }
   .add-task-form.open { display: flex; }
   .form-input { padding: 8px 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); font-size: 13px; background: var(--bg-primary); color: var(--text-primary); width: 100%; font-family: inherit; }
@@ -96,7 +100,6 @@
   .form-btn-cancel { background: none; color: var(--text-secondary); }
   .form-btn-cancel:hover { background: var(--bg-secondary); }
 
-  /* MAIN PANEL */
   .main { display: flex; flex-direction: column; overflow: hidden; background: var(--bg-primary); }
   .main-header { padding: 10px 14px; border-bottom: 0.5px solid var(--border-light); display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
   .tab-btn { padding: 5px 12px; border-radius: var(--radius-sm); border: 0.5px solid transparent; font-size: 12px; cursor: pointer; color: var(--text-secondary); background: none; font-family: inherit; }
@@ -105,7 +108,6 @@
   .hdr-select { font-size: 12px; padding: 5px 8px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; margin-left: auto; font-family: inherit; }
   .hdr-select + .hdr-select { margin-left: 4px; }
 
-  /* PANELS */
   .panel { flex: 1; overflow-y: auto; display: none; flex-direction: column; }
   .panel.active { display: flex; }
   .detail-panel { padding: 16px; gap: 12px; }
@@ -114,9 +116,24 @@
   .detail-desc { font-size: 13px; line-height: 1.75; white-space: pre-wrap; word-break: break-word; color: var(--text-primary); }
   .detail-value { font-size: 13px; color: var(--text-primary); }
   .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .chat-panel { padding: 14px; gap: 10px; }
 
-  /* MESSAGES */
+  /* CHAT PANEL */
+  .chat-panel { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+  .chat-panel.active { display: flex; }
+  .chat-messages-area { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .chat-compose { border-top: 0.5px solid var(--border-light); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+  .compose-toolbar { display: flex; align-items: center; gap: 6px; }
+  .compose-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .compose-divider { flex: 1; height: 0.5px; background: var(--border-light); }
+  .ai-btn { padding: 4px 10px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-medium); background: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-family: inherit; }
+  .ai-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+  .compose-input { padding: 10px 12px; border-radius: var(--radius-lg); border: 0.5px solid var(--border-medium); font-size: 13px; resize: none; min-height: 44px; max-height: 120px; background: var(--bg-secondary); color: var(--text-primary); font-family: inherit; width: 100%; }
+  .compose-input:focus { outline: none; border-color: var(--accent); }
+  .compose-actions { display: flex; align-items: center; justify-content: space-between; }
+  .compose-hint { font-size: 11px; color: var(--text-tertiary); }
+  .send-btn { padding: 7px 16px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; font-family: inherit; }
+  .send-btn:hover { background: var(--accent-dark); }
+
   .msg { display: flex; gap: 8px; align-items: flex-start; }
   .msg.user-msg { flex-direction: row-reverse; }
   .avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
@@ -128,13 +145,6 @@
   .msg-meta { font-size: 11px; opacity: 0.5; margin-top: 3px; display: block; }
   .user-chip { display: inline-flex; font-size: 11px; padding: 1px 8px; border-radius: 20px; background: #EEEDFE; color: #3C3489; margin-bottom: 3px; }
 
-  /* INPUT */
-  .input-area { padding: 10px 14px; border-top: 0.5px solid var(--border-light); display: none; gap: 8px; align-items: flex-end; flex-shrink: 0; }
-  .chat-input { flex: 1; padding: 9px 12px; border-radius: var(--radius-lg); border: 0.5px solid var(--border-medium); font-size: 13px; resize: none; min-height: 42px; max-height: 100px; background: var(--bg-secondary); color: var(--text-primary); font-family: inherit; }
-  .chat-input:focus { outline: none; border-color: var(--accent); }
-  .send-btn { width: 38px; height: 38px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
-  .send-btn:hover { background: var(--accent-dark); }
-
   .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-tertiary); font-size: 13px; }
 
   .typing { display: flex; gap: 4px; align-items: center; padding: 2px 0; }
@@ -143,10 +153,22 @@
   .typing span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
 
+  /* CONFIRM MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: var(--bg-primary); border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; max-width: 320px; width: 90%; display: flex; flex-direction: column; gap: 14px; }
+  .modal-title { font-size: 15px; font-weight: 500; }
+  .modal-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal-btn { padding: 7px 16px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; border: 0.5px solid var(--border-medium); font-family: inherit; }
+  .modal-btn-cancel { background: none; color: var(--text-secondary); }
+  .modal-btn-cancel:hover { background: var(--bg-secondary); }
+  .modal-btn-delete { background: #E24B4A; color: white; border-color: #E24B4A; }
+  .modal-btn-delete:hover { background: #A32D2D; }
+
   @media (max-width: 600px) {
     .app-body { grid-template-columns: 1fr; }
     .sidebar { display: none; }
-    .sidebar.show { display: flex; position: absolute; z-index: 10; width: 80%; height: calc(100% - 80px); top: 80px; left: 0; box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
   }
 </style>
 </head>
@@ -200,7 +222,7 @@
     </div>
 
     <div class="main">
-      <div class="main-header" id="mainHeader">
+      <div class="main-header">
         <button class="tab-btn active" id="tabDetail" onclick="switchTab('detail')" style="display:none">
           <i class="ti ti-info-circle" style="font-size:13px;margin-right:3px"></i>Detalhes
         </button>
@@ -221,6 +243,7 @@
         </select>
       </div>
 
+      <!-- DETAIL PANEL -->
       <div class="panel detail-panel active" id="panelDetail">
         <div class="empty-state" id="detailEmpty">
           <i class="ti ti-layout-kanban" style="font-size:36px"></i>
@@ -252,18 +275,44 @@
         </div>
       </div>
 
+      <!-- CHAT PANEL -->
       <div class="panel chat-panel" id="panelChat">
-        <div class="empty-state" id="chatEmpty">
-          <i class="ti ti-message-circle" style="font-size:36px"></i>
-          <span>Selecione uma atividade</span>
+        <div class="chat-messages-area" id="chatMessagesArea">
+          <div class="empty-state" id="chatEmpty">
+            <i class="ti ti-message-circle" style="font-size:36px"></i>
+            <span>Selecione uma atividade</span>
+          </div>
+          <div id="chatMessages" style="display:none;flex-direction:column;gap:10px"></div>
         </div>
-        <div id="chatMessages" style="display:none;flex-direction:column;gap:10px"></div>
+        <div class="chat-compose" id="chatCompose" style="display:none">
+          <div class="compose-toolbar">
+            <span class="compose-label">Comentar</span>
+            <div class="compose-divider"></div>
+            <button class="ai-btn" onclick="askAI()" id="aiBtn">
+              <i class="ti ti-sparkles" style="font-size:13px"></i> Perguntar à IA
+            </button>
+          </div>
+          <textarea class="compose-input" id="chatInput" placeholder="Escreva um comentário, atualização ou discussão sobre esta atividade..." onkeydown="handleKey(event)"></textarea>
+          <div class="compose-actions">
+            <span class="compose-hint">Shift+Enter para nova linha · Enter para enviar</span>
+            <button class="send-btn" onclick="sendMessage()">
+              <i class="ti ti-send" style="font-size:14px"></i> Enviar
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+</div>
 
-      <div class="input-area" id="inputArea">
-        <textarea class="chat-input" id="chatInput" placeholder="Pergunte, atualize ou comente..." rows="1" onkeydown="handleKey(event)"></textarea>
-        <button class="send-btn" onclick="sendMessage()"><i class="ti ti-send"></i></button>
-      </div>
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-title">Deletar atividade</div>
+    <div class="modal-sub" id="deleteModalText">Tem certeza que deseja deletar esta atividade? Esta ação não pode ser desfeita.</div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+      <button class="modal-btn modal-btn-delete" onclick="confirmDelete()">Deletar</button>
     </div>
   </div>
 </div>
@@ -285,7 +334,7 @@ const IMPORTANCE = {
 };
 const AVATAR_COLORS = ['#EEEDFE:#3C3489','#E1F5EE:#085041','#FAEEDA:#633806','#FAECE7:#712B13','#E6F1FB:#0C447C'];
 
-let currentUser = '', currentId = null, tasks = [], currentTab = 'detail';
+let currentUser = '', currentId = null, tasks = [], currentTab = 'detail', deleteTargetId = null;
 const DB_KEY = 'board-tasks-v1';
 
 function ts() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
@@ -307,31 +356,81 @@ function doLogin() {
   if (!tasks.length) {
     tasks = [
       {id:1,name:'Implementação MFA no site',desc:'Configurar autenticação multifator para todos os usuários.\n\n• Avaliar bibliotecas TOTP disponíveis\n• Integrar com o fluxo de login existente\n• Adicionar tela de configuração no perfil\n• Testes de regressão em todos os fluxos de autenticação',owner:'Time Dev',status:'progress',importance:'critical',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
-      {id:2,name:'Revisão de segurança',desc:'Auditar permissões de acesso de todos os módulos.\n\n• Verificar tokens expirados e sessões ativas\n• Revisar logs dos últimos 30 dias\n• Corrigir vulnerabilidades do último pentest\n• Atualizar dependências com CVEs conhecidos',owner:'Ana',status:'todo',importance:'high',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
-      {id:3,name:'Deploy em produção',desc:'Subir versão 2.1 para produção com rollback automático.\n\n• Smoke tests pós-deploy\n• Notificação para o time após conclusão\n• Atualizar documentação de release',owner:'Carlos',status:'done',importance:'medium',history:[{user:'Sistema',text:'Atividade criada.',time:ts()},{user:'Carlos',text:'Deploy realizado com sucesso às 14h. Versão 2.1 em prod.',time:ts()}]},
+      {id:2,name:'Revisão de segurança',desc:'Auditar permissões de acesso de todos os módulos.\n\n• Verificar tokens expirados e sessões ativas\n• Revisar logs dos últimos 30 dias\n• Corrigir vulnerabilidades do último pentest',owner:'Ana',status:'todo',importance:'high',history:[{user:'Sistema',text:'Atividade criada.',time:ts()}]},
+      {id:3,name:'Deploy em produção',desc:'Subir versão 2.1 para produção com rollback automático.\n\n• Smoke tests pós-deploy\n• Notificação para o time após conclusão',owner:'Carlos',status:'done',importance:'medium',history:[{user:'Sistema',text:'Atividade criada.',time:ts()},{user:'Carlos',text:'Deploy realizado com sucesso às 14h. Versão 2.1 em prod.',time:ts()}]},
     ];
     saveLocal();
   }
   renderSidebar();
   setSyncDot('ok');
-  setInterval(() => { loadLocal(); renderSidebar(); if(currentId){ const t=tasks.find(x=>x.id===currentId); if(t&&currentTab==='detail') renderDetail(t); if(t&&currentTab==='chat') renderChat(); } }, 3000);
+  setInterval(() => {
+    loadLocal(); renderSidebar();
+    if(currentId){ const t=tasks.find(x=>x.id===currentId); if(t){ if(currentTab==='detail') renderDetail(t); if(currentTab==='chat') renderChat(); } }
+  }, 3000);
 }
 
 function renderSidebar() {
   const list = document.getElementById('taskList');
   list.innerHTML = '';
-  tasks.forEach(t => {
+  tasks.forEach((t, idx) => {
     const s = STATUS[t.status], im = IMPORTANCE[t.importance||'medium'];
     const div = document.createElement('div');
     div.className = 'task-item' + (currentId===t.id?' active':'');
-    div.innerHTML = `<div class="task-name">${t.name}</div>
-      <div class="task-badges">
-        <span class="badge ${s.badge}"><span class="status-dot" style="background:${s.dot}"></span>${s.label}</span>
-        <span class="badge ${im.badge}"><i class="ti ti-star" style="font-size:11px"></i>${im.label}</span>
+    div.innerHTML = `
+      <div class="task-item-body" onclick="selectTask(${t.id})">
+        <div class="task-name">${t.name}</div>
+        <div class="task-badges">
+          <span class="badge ${s.badge}"><span class="status-dot" style="background:${s.dot}"></span>${s.label}</span>
+          <span class="badge ${im.badge}"><i class="ti ti-star" style="font-size:11px"></i>${im.label}</span>
+        </div>
+      </div>
+      <div class="task-actions">
+        <button class="task-action-btn" onclick="moveTask(${t.id},-1)" title="Mover para cima" ${idx===0?'style="opacity:0.3;cursor:default"':''}>
+          <i class="ti ti-arrow-up"></i>
+        </button>
+        <button class="task-action-btn" onclick="moveTask(${t.id},1)" title="Mover para baixo" ${idx===tasks.length-1?'style="opacity:0.3;cursor:default"':''}>
+          <i class="ti ti-arrow-down"></i>
+        </button>
+        <div class="task-action-spacer"></div>
+        <button class="task-action-btn delete" onclick="openDeleteModal(${t.id})" title="Deletar atividade">
+          <i class="ti ti-trash"></i>
+        </button>
       </div>`;
-    div.onclick = () => selectTask(t.id);
     list.appendChild(div);
   });
+}
+
+function moveTask(id, dir) {
+  const idx = tasks.findIndex(x => x.id===id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= tasks.length) return;
+  const tmp = tasks[idx]; tasks[idx] = tasks[newIdx]; tasks[newIdx] = tmp;
+  saveLocal(); renderSidebar();
+}
+
+function openDeleteModal(id) {
+  deleteTargetId = id;
+  const t = tasks.find(x => x.id===id);
+  document.getElementById('deleteModalText').textContent = `Tem certeza que deseja deletar "${t.name}"? Esta ação não pode ser desfeita.`;
+  document.getElementById('deleteModal').classList.add('open');
+}
+function closeDeleteModal() {
+  deleteTargetId = null;
+  document.getElementById('deleteModal').classList.remove('open');
+}
+function confirmDelete() {
+  if (!deleteTargetId) return;
+  tasks = tasks.filter(x => x.id !== deleteTargetId);
+  if (currentId === deleteTargetId) {
+    currentId = null;
+    document.getElementById('detailEmpty').style.display = '';
+    document.getElementById('detailContent').style.display = 'none';
+    document.getElementById('chatEmpty').style.display = '';
+    document.getElementById('chatMessages').style.display = 'none';
+    document.getElementById('chatCompose').style.display = 'none';
+    ['tabDetail','tabChat','statusSelect','importanceSelect'].forEach(id => document.getElementById(id).style.display='none');
+  }
+  saveLocal(); renderSidebar(); closeDeleteModal();
 }
 
 function renderDetail(t) {
@@ -355,7 +454,9 @@ function renderChat() {
   msgs.style.display = 'flex';
   msgs.innerHTML = '';
   t.history.forEach(m => appendBubbleEl(msgs, m));
-  document.getElementById('panelChat').scrollTop = 99999;
+  document.getElementById('chatCompose').style.display = '';
+  const area = document.getElementById('chatMessagesArea');
+  area.scrollTop = area.scrollHeight;
 }
 
 function appendBubbleEl(container, m) {
@@ -386,8 +487,7 @@ function switchTab(tab) {
 function selectTask(id) {
   currentId = id;
   const t = tasks.find(x => x.id===id);
-  ['tabDetail','tabChat'].forEach(b => document.getElementById(b).style.display='');
-  ['statusSelect','importanceSelect','inputArea'].forEach(s => document.getElementById(s).style.display='');
+  ['tabDetail','tabChat','statusSelect','importanceSelect'].forEach(s => document.getElementById(s).style.display='');
   document.getElementById('statusSelect').value = t.status;
   document.getElementById('importanceSelect').value = t.importance||'medium';
   renderSidebar();
@@ -404,13 +504,11 @@ function changeField(field, val) {
   t[field] = val;
   const entry = {user:'Sistema', text:`${currentUser} alterou ${names[field]} de "${old}" para "${labels[field][val].label}".`, time:ts()};
   t.history.push(entry);
-  saveLocal();
-  renderSidebar();
-  renderDetail(t);
-  if (currentTab==='chat') { const msgs=document.getElementById('chatMessages'); appendBubbleEl(msgs,entry); document.getElementById('panelChat').scrollTop=99999; }
+  saveLocal(); renderSidebar(); renderDetail(t);
+  if (currentTab==='chat') { const msgs=document.getElementById('chatMessages'); appendBubbleEl(msgs,entry); document.getElementById('chatMessagesArea').scrollTop=99999; }
 }
 
-async function sendMessage() {
+function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text || !currentId) return;
@@ -424,25 +522,46 @@ async function sendMessage() {
   document.getElementById('chatEmpty').style.display = 'none';
   msgs.style.display = 'flex';
   appendBubbleEl(msgs, entry);
-  const panel = document.getElementById('panelChat');
-  panel.scrollTop = 99999;
+  const area = document.getElementById('chatMessagesArea');
+  area.scrollTop = area.scrollHeight;
   saveLocal();
+}
+
+async function askAI() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!currentId) return;
+  const question = text || 'Qual o status atual desta atividade e o que ainda precisa ser feito?';
+  input.value = '';
+
+  const t = tasks.find(x => x.id===currentId);
+  if (currentTab !== 'chat') switchTab('chat');
+  const msgs = document.getElementById('chatMessages');
+  document.getElementById('chatEmpty').style.display = 'none';
+  msgs.style.display = 'flex';
+
+  if (text) {
+    const userEntry = {user:currentUser, text:question, time:ts()};
+    t.history.push(userEntry);
+    appendBubbleEl(msgs, userEntry);
+  }
 
   const typingDiv = document.createElement('div');
   typingDiv.className = 'msg';
   typingDiv.innerHTML = `<div class="avatar" style="background:#EEEDFE;color:#3C3489">IA</div><div class="bubble bubble-ai"><div class="typing"><span></span><span></span><span></span></div></div>`;
   msgs.appendChild(typingDiv);
-  panel.scrollTop = 99999;
+  const area = document.getElementById('chatMessagesArea');
+  area.scrollTop = 99999;
 
   const im = IMPORTANCE[t.importance||'medium'];
-  const histTxt = t.history.slice(-8).map(h=>`${h.user}: ${h.text}`).join('\n');
-  const sysPrompt = `Você é um assistente de gestão de atividades de um time. Responda em português, de forma direta (máximo 3 frases). Contexto:\n- Atividade: ${t.name}\n- Descrição: ${t.desc}\n- Responsável: ${t.owner}\n- Status: ${STATUS[t.status].label}\n- Importância: ${im.label}\n- Usuário: ${currentUser}\n- Histórico:\n${histTxt}\n\nSe perguntarem sobre status ou importância, explique claramente. Seja conciso.`;
+  const histTxt = t.history.slice(-10).map(h=>`${h.user}: ${h.text}`).join('\n');
+  const sysPrompt = `Você é um assistente de gestão de atividades de um time. Responda em português, de forma direta e útil (máximo 4 frases). Contexto:\n- Atividade: ${t.name}\n- Descrição: ${t.desc}\n- Responsável: ${t.owner}\n- Status: ${STATUS[t.status].label}\n- Importância: ${im.label}\n- Usuário: ${currentUser}\n- Histórico:\n${histTxt}\n\nAjude o time a entender o andamento, próximos passos ou responda a pergunta feita.`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:sysPrompt, messages:[{role:'user',content:text}] })
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:sysPrompt, messages:[{role:'user',content:question}] })
     });
     const data = await res.json();
     typingDiv.remove();
@@ -450,7 +569,7 @@ async function sendMessage() {
     const aiEntry = {user:'IA', text:reply, time:ts()};
     t.history.push(aiEntry);
     appendBubbleEl(msgs, aiEntry);
-    panel.scrollTop = 99999;
+    area.scrollTop = area.scrollHeight;
     saveLocal();
   } catch(e) {
     typingDiv.remove();
@@ -462,7 +581,7 @@ function handleKey(e) {
   if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   const ta = document.getElementById('chatInput');
   ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight,100)+'px';
+  ta.style.height = Math.min(ta.scrollHeight, 120)+'px';
 }
 
 function toggleForm() {
@@ -486,9 +605,7 @@ function addTask() {
   document.getElementById('newTaskName').value = '';
   document.getElementById('newTaskDesc').value = '';
   document.getElementById('newTaskOwner').value = '';
-  toggleForm();
-  renderSidebar();
-  saveLocal();
+  toggleForm(); renderSidebar(); saveLocal();
 }
 
 function copyLink() {
